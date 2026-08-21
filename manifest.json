@@ -1,15 +1,15 @@
 {
-  "name": "ダイスK",
-  "short_name": "🎲K",
+  "name": "暮らしのサポート工房",
+  "short_name": "サポート工房",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2b6cb0",
   "icons": [
     {
-      "src": "dice.png",
+      "src": "dice.webp",
       "sizes": "192x192 512x512",
-      "type": "image/png"
+      "type": "image/webp"
     }
   ]
 }
