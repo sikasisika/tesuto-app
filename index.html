@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>暮らしのサポートサービス | 家具組立・設置・回収</title>
+  <style>
+    :root {
+      --main-color: #2b6cb0;
+      --accent-color: #e53e3e;
+      --bg-color: #f7fafc;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: white;
+      text-align: center;
+      padding: 30px 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    header h1 { margin: 0; font-size: 24px; color: var(--main-color); }
+    header p { margin: 5px 0 0; font-size: 14px; color: #666; }
+    
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+    
+    .section-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    h2 {
+      font-size: 18px;
+      border-bottom: 2px solid var(--main-color);
+      padding-bottom: 8px;
+      margin-top: 0;
+      color: #2d3748;
+    }
+    
+    .category-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .category-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #edf2f7;
+    }
+    .category-item:last-child { border-bottom: none; }
+    .category-title { font-weight: bold; color: #2d3748; }
+    .category-desc { font-size: 13px; color: #718096; margin-top: 4px; }
+    
+    .cta-area {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+    }
+    .btn-line { background-color: #06c755; }
+    .btn-reserve { background-color: var(--main-color); }
+    .btn-form { background-color: #4a5568; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>暮らしのサポート工房</h1>
+    <p>新築キッチン設置・家具組立・不用品回収まで迅速対応</p>
+  </header>
+
+  <div class="container">
+
+    <!-- 会社・サービス紹介 -->
+    <div class="section-card">
+      <h2>サービス案内</h2>
+      <ul class="category-list">
+        <li class="category-item">
+          <div class="category-title">🍳 キッチン・住宅設備の設置</div>
+          <div class="category-desc">新築・リフォーム時のキッチン・収納の組み立てや取り付け作業を行います。</div>
+        </li>
+        <li class="category-item">
+          <div class="category-title">🪑 家具の組み立て代行</div>
+          <div class="category-desc">通販などで購入した大型家具・ベッド・棚などを丁寧に組み立てます。</div>
+        </li>
+        <li class="category-item">
+          <div class="category-title">🚚 不用品回収・家具処分</div>
+          <div class="category-desc">買い替えで不要になった古い家具の解体・回収・処分サポートを承ります。</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- お問い合わせ・予約 -->
+    <div class="section-card">
+      <h2>ご相談・日程のご予約</h2>
+      <p style="font-size: 13px; color: #666;">写真をお送りいただくと、事前にお見積り・相談がスムーズです。</p>
+      
+      <div class="cta-area">
+        <!-- LINEのリンクに差し替え可能 -->
+        <a href="https://line.me/" class="btn btn-line">LINEで写真相談・見積もり（推奨）</a>
+        
+        <!-- TimeRexなどの予約ページリンクに差し替え可能 -->
+        <a href="#" class="btn btn-reserve">空き日程の確認・訪問予約</a>
+        
+        <!-- Googleフォームなどのリンクに差し替え可能 -->
+        <a href="#" class="btn btn-form">メールフォームでお問い合わせ</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
