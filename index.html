@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>暮らしのサポートサービス | 家具組立・設置・回収</title>
+  
+  <!-- アプリ化のための設定 -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="サポート工房">
+  
+  <!-- ここを dice.png に変更 -->
+  <link rel="apple-touch-icon" href="dice.png">
+  
   <style>
     :root {
       --main-color: #2b6cb0;
@@ -17,6 +27,7 @@
       background-color: var(--bg-color);
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
     header {
       background: white;
@@ -76,6 +87,7 @@
       font-weight: bold;
       text-decoration: none;
       color: white;
+      text-align: center;
     }
     .btn-line { background-color: #06c755; }
     .btn-reserve { background-color: var(--main-color); }
@@ -90,8 +102,6 @@
   </header>
 
   <div class="container">
-
-    <!-- 会社・サービス紹介 -->
     <div class="section-card">
       <h2>サービス案内</h2>
       <ul class="category-list">
@@ -110,23 +120,16 @@
       </ul>
     </div>
 
-    <!-- お問い合わせ・予約 -->
     <div class="section-card">
       <h2>ご相談・日程のご予約</h2>
       <p style="font-size: 13px; color: #666;">写真をお送りいただくと、事前にお見積り・相談がスムーズです。</p>
       
       <div class="cta-area">
-        <!-- LINEのリンクに差し替え可能 -->
-        <a href="https://line.me/" class="btn btn-line">LINEで写真相談・見積もり（推奨）</a>
-        
-        <!-- TimeRexなどの予約ページリンクに差し替え可能 -->
+        <a href="https://line.me/" class="btn btn-line">LINEで写真相談・見積もり</a>
         <a href="#" class="btn btn-reserve">空き日程の確認・訪問予約</a>
-        
-        <!-- Googleフォームなどのリンクに差し替え可能 -->
         <a href="#" class="btn btn-form">メールフォームでお問い合わせ</a>
       </div>
     </div>
-
   </div>
 
 </body>
