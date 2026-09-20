@@ -1,1038 +1,172 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>暮らしのサポート工房</title>
-  
-  <link rel="manifest" href="manifest.json">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="サポート工房">
-  <link rel="apple-touch-icon" href="dice.webp">
-  
-  <style>
-    :root {
-      --main-color: #2b6cb0;
-      --accent-color: #e53e3e;
-      --bg-color: #f7fafc;
-      --text-color: #2d3748;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      line-height: 1.6;
-      color: var(--text-color);
-      background-color: var(--bg-color);
-      margin: 0;
-      padding: 0 0 40px 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-    
-    /* 固定ヘッダーエリア */
-    .header-wrapper {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-    }
-    header {
-      text-align: center;
-      padding: 14px 15px 8px 15px;
-    }
-    header h1 { margin: 0; font-size: 19px; color: var(--main-color); }
-    header p { margin: 2px 0 0; font-size: 11px; color: #718096; }
-
-    /* 上部タブバー（紹介 / 計算 / 質問 / 相談） */
-    .top-nav {
-      display: flex;
-      border-top: 1px solid #edf2f7;
-      background: #ffffff;
-    }
-    .nav-btn {
-      flex: 1;
-      padding: 10px 0;
-      border: none;
-      background: none;
-      font-size: 13px;
-      font-weight: bold;
-      color: #718096;
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      transition: all 0.2s ease;
-    }
-    .nav-btn.active {
-      color: var(--main-color);
-      border-bottom: 3px solid var(--main-color);
-      background-color: #f8fafc;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 15px auto;
-      padding: 0 15px;
-    }
-    
-    .section-card {
-      background: white;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    h2 {
-      font-size: 16px;
-      border-bottom: 2px solid var(--main-color);
-      padding-bottom: 8px;
-      margin-top: 0;
-      margin-bottom: 14px;
-      color: var(--text-color);
-    }
-
-    /* 魅力・案内アピールエリア */
-    .hero-banner {
-      background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
-      color: white;
-      border-radius: 12px;
-      padding: 20px 16px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 10px rgba(43, 108, 176, 0.2);
-      text-align: center;
-    }
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      color: #fff;
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-      font-weight: bold;
-      letter-spacing: 0.5px;
-    }
-    .hero-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 8px;
-      line-height: 1.4;
-    }
-    .hero-desc {
-      font-size: 12px;
-      color: #e2e8f0;
-      line-height: 1.6;
-      margin-bottom: 15px;
-      text-align: left;
-      background: rgba(0, 0, 0, 0.15);
-      padding: 10px 12px;
-      border-radius: 8px;
-    }
-    .hero-points {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-    .point-box {
-      background: white;
-      color: #2d3748;
-      border-radius: 8px;
-      padding: 8px 4px;
-      font-size: 11px;
-      font-weight: bold;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    /* サービスカードのグリッド配置 */
-    .service-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .service-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .service-img {
-      width: 100%;
-      height: 100px;
-      object-fit: cover;
-      background-color: #edf2f7;
-    }
-    .service-body {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-    .service-title {
-      font-size: 13px;
-      font-weight: bold;
-      color: #2d3748;
-      margin-bottom: 4px;
-    }
-    .service-desc {
-      font-size: 11px;
-      color: #718096;
-      line-height: 1.4;
-      flex-grow: 1;
-    }
-    .service-price {
-      margin-top: 6px;
-      font-size: 12px;
-      font-weight: bold;
-      color: var(--main-color);
-    }
-
-    /* インフォメーション枠（エリア・駐車場・安心宣言） */
-    .info-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
-      font-size: 12px;
-    }
-    .info-title {
-      font-weight: bold;
-      color: #2b6cb0;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .info-text {
-      color: #4a5568;
-      line-height: 1.5;
-    }
-
-    /* 支払方法エリア */
-    .payment-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .payment-item {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 12px;
-    }
-    .payment-item-title {
-      font-weight: bold;
-      color: #2d3748;
-      margin-bottom: 4px;
-    }
-    .payment-tags {
-      font-size: 11px;
-      color: #718096;
-      line-height: 1.4;
-    }
-    .payment-note {
-      font-size: 11px;
-      color: #718096;
-      margin-top: 10px;
-      text-align: right;
-    }
-
-    /* Q&A アコーディオン */
-    .qa-item {
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      overflow: hidden;
-      background: white;
-    }
-    .qa-question {
-      padding: 14px 12px;
-      font-size: 13px;
-      font-weight: bold;
-      color: #2d3748;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #f8fafc;
-    }
-    .qa-question span.q-mark {
-      color: var(--main-color);
-      font-size: 15px;
-      font-weight: 900;
-      margin-right: 6px;
-    }
-    .qa-answer {
-      padding: 12px 14px;
-      font-size: 12px;
-      color: #4a5568;
-      line-height: 1.6;
-      background: #ffffff;
-      border-top: 1px solid #edf2f7;
-      display: none;
-    }
-    .qa-answer span.a-mark {
-      color: var(--accent-color);
-      font-weight: bold;
-      margin-right: 6px;
-    }
-    .qa-item.open .qa-answer {
-      display: block;
-    }
-    .qa-toggle-icon {
-      font-size: 11px;
-      color: #a0aec0;
-    }
-
-    /* 見積もり計算フォーム */
-    .calc-section-title {
-      font-size: 13px;
-      font-weight: bold;
-      color: #4a5568;
-      margin: 12px 0 6px 0;
-      border-left: 3px solid var(--main-color);
-      padding-left: 6px;
-    }
-    .calc-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px dashed #e2e8f0;
-    }
-    .calc-item label {
-      font-size: 13px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .calc-item input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--main-color);
-    }
-    .price-tag { font-size: 12px; color: #718096; white-space: nowrap; }
-    
-    .total-box {
-      background-color: #ebf8ff;
-      border: 2px solid #bee3f8;
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
-      margin-top: 15px;
-    }
-    .total-label { font-size: 13px; color: #2b6cb0; font-weight: bold; }
-    .total-price { font-size: 26px; color: var(--accent-color); font-weight: bold; }
-    .tax-note { font-size: 11px; color: #718096; }
-
-    /* チャット形式フォーム */
-    .chat-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 15px;
-    }
-    .chat-bubble {
-      max-width: 85%;
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-size: 13px;
-      line-height: 1.5;
-      word-break: break-word;
-    }
-    .chat-bubble.bot {
-      align-self: flex-start;
-      background-color: #edf2f7;
-      color: #2d3748;
-      border-bottom-left-radius: 2px;
-    }
-    .chat-bubble.user {
-      align-self: flex-end;
-      background-color: var(--main-color);
-      color: white;
-      border-bottom-right-radius: 2px;
-    }
-    .chat-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .chat-opt-btn {
-      background: white;
-      border: 1px solid var(--main-color);
-      color: var(--main-color);
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .chat-input-area {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .chat-input-area input, .chat-input-area textarea {
-      flex: 1;
-      padding: 10px 12px;
-      border: 1px solid #cbd5e0;
-      border-radius: 8px;
-      font-size: 13px;
-      box-sizing: border-box;
-      outline: none;
-    }
-    .chat-send-btn {
-      background: var(--main-color);
-      color: white;
-      border: none;
-      padding: 0 16px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    /* ボタン共通 */
-    .btn {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: bold;
-      text-decoration: none;
-      color: white;
-      text-align: center;
-    }
-    .btn-line { background-color: #06c755; }
-    .btn-reserve { background-color: var(--main-color); }
-
-    /* タブ切り替え */
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    /* 左下追従アプリアイコンボタン */
-    .floating-app-btn {
-      position: fixed;
-      left: 16px;
-      bottom: 20px;
-      background: white;
-      border-radius: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-      display: flex;
-      align-items: center;
-      padding: 5px 12px 5px 5px;
-      cursor: pointer;
-      z-index: 99;
-      border: 1px solid #e2e8f0;
-    }
-    .floating-app-btn img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 8px;
-      border: 1px solid #e2e8f0;
-    }
-    .floating-app-text { text-align: left; }
-    .floating-app-text .title { font-size: 11px; font-weight: bold; color: #2d3748; line-height: 1.2; }
-    .floating-app-text .sub { font-size: 9px; color: var(--main-color); font-weight: bold; }
-
-    /* モーダル */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 200;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal-box {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      max-width: 360px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    .modal-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 12px;
-      object-fit: cover;
-      margin-bottom: 10px;
-    }
-    .modal-title { font-size: 16px; font-weight: bold; color: #2d3748; margin-bottom: 8px; }
-    .modal-desc {
-      font-size: 12px;
-      color: #4a5568;
-      text-align: left;
-      line-height: 1.6;
-      background: #f7fafc;
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-    .close-btn {
-      background: #e2e8f0;
-      color: #4a5568;
-      border: none;
-      padding: 10px 0;
-      width: 100%;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 13px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>特殊収容施設 - 囚人データベース</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --border-color: #333333;
+            --accent-color: #8b0000;
+            --text-main: #e0e0e0;
+            --text-sub: #a0a0a0;
+            --danger-color: #ff4d4d;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1 {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: var(--danger-color);
+            margin: 0;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+        }
+        .sidebar {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .sidebar h2 {
+            font-size: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+            margin-top: 0;
+            color: var(--text-sub);
+        }
+        .prisoner-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .prisoner-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #252525;
+            border-left: 4px solid var(--accent-color);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .prisoner-item:hover {
+            background-color: #303030;
+        }
+        .main-panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 4px;
+            position: relative;
+        }
+        .confidential-stamp {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            border: 2px solid var(--danger-color);
+            color: var(--danger-color);
+            padding: 5px 15px;
+            font-weight: bold;
+            transform: rotate(5deg);
+            opacity: 0.8;
+            letter-spacing: 3px;
+        }
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .profile-group {
+            background-color: #161616;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 4px;
+        }
+        .profile-group.full {
+            grid-column: span 2;
+        }
+        .label {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            display: block;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+        .value {
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+        .secret-box {
+            border-left: 3px solid var(--danger-color);
+            background-color: #221212;
+            padding: 10px;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- 固定ヘッダー & 上部タブメニュー -->
-  <div class="header-wrapper">
     <header>
-      <h1>暮らしのサポート工房</h1>
-      <p>住まいのお困りごとをまるごと解決</p>
+        <h1>CLASSIFIED // PRISONER RECORD SYSTEM</h1>
+        <div style="font-size: 0.8rem; color: var(--text-sub);">SECURITY LEVEL: RESTRICTED</div>
     </header>
 
-    <nav class="top-nav">
-      <button class="nav-btn active" id="btn-home" onclick="switchTab('tab-home', this)">紹介</button>
-      <button class="nav-btn" id="btn-calc" onclick="switchTab('tab-calc', this)">計算</button>
-      <button class="nav-btn" id="btn-qa" onclick="switchTab('tab-qa', this)">質問</button>
-      <button class="nav-btn" id="btn-chat" onclick="switchTab('tab-chat', this)">相談</button>
-    </nav>
-  </div>
-
-  <div class="container">
-
-    <!-- タブ1: 紹介（サービス案内・信頼情報・予約） -->
-    <div id="tab-home" class="tab-content active">
-
-      <!-- 魅力・案内アピールエリア -->
-      <div class="hero-banner">
-        <div class="hero-badge">地域密着 / 迅速丁寧</div>
-        <div class="hero-title">「届いたけど組み立てられない…」<br>そのお悩み、すぐ解決します！</div>
-        <div class="hero-desc">
-          新築キッチンの設置から、ネット通販で購入した大型家具の組み立て、買い替えに伴う古い家具の処分までワンストップで対応。地域密着だからこそのスピーディーかつ柔軟なサポートをお届けします。
+    <div class="container">
+        <div class="sidebar">
+            <h2>収監者リスト</h2>
+            <ul class="prisoner-list">
+                <li class="prisoner-item">アリサ (ALISA)</li>
+                <!-- 今後キャラを追加していく場所 -->
+            </ul>
         </div>
-        
-        <div class="hero-points">
-          <div class="point-box">最短即日対応</div>
-          <div class="point-box">損害保険加入済み</div>
-          <div class="point-box">明朗な概算会計</div>
-          <div class="point-box">丁寧な自社施工</div>
-        </div>
-      </div>
 
-      <!-- サービス一覧 -->
-      <div class="section-card">
-        <h2>サービス内容一覧</h2>
-        
-        <div class="service-grid">
-          <div class="service-card">
-            <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=500&auto=format&fit=crop&q=60" alt="キッチン設置" class="service-img">
-            <div class="service-body">
-              <div class="service-title">キッチン設置</div>
-              <div class="service-desc">新築・リフォーム時の設備取付や交換作業を代行。</div>
-              <div class="service-price">¥15,000〜</div>
+        <div class="main-panel">
+            <div class="confidential-stamp">極秘</div>
+            <h2>囚人プロファイル</h2>
+            
+            <div class="profile-grid">
+                <div class="profile-group">
+                    <span class="label">氏名</span>
+                    <span class="value">アリサ</span>
+                </div>
+                <div class="profile-group">
+                    <span class="label">基本情報</span>
+                    <span class="value">10代 / 人間 / 容姿端麗（本人無頓着）</span>
+                </div>
+                <div class="profile-group">
+                    <span class="label">表向きの立場</span>
+                    <span class="value">祖父の罪を被せられた無実の少女</span>
+                </div>
+                <div class="profile-group">
+                    <span class="label">収監理由（自認）</span>
+                    <span class="value">冤罪による不当投獄</span>
+                </div>
+                <div class="profile-group full">
+                    <span class="label">【真の記録・裏設定】</span>
+                    <div class="secret-box">
+                        <span class="value">両親を殺害した後、その亡骸と数週間にわたって同じ家で過ごしていた精神異常者。現実逃避と強烈な思い込みにより、自らを「犠牲者」と思い込んでいる。周囲の凶悪犯に対しても無自覚に危うい狂気を見せる。</span>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <div class="service-card">
-            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&auto=format&fit=crop&q=60" alt="家具組み立て" class="service-img">
-            <div class="service-body">
-              <div class="service-title">家具組み立て</div>
-              <div class="service-desc">通販の大型家具やベッド、キャビネット等を組み立て。</div>
-              <div class="service-price">¥6,000〜</div>
-            </div>
-          </div>
-
-          <div class="service-card">
-            <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=500&auto=format&fit=crop&q=60" alt="不用品回収" class="service-img">
-            <div class="service-body">
-              <div class="service-title">家具処分・回収</div>
-              <div class="service-desc">買い替えで不要になった古い家具の解体・回収を補助。</div>
-              <div class="service-price">¥8,000〜</div>
-            </div>
-          </div>
-
-          <div class="service-card">
-            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&auto=format&fit=crop&q=60" alt="住まいの修繕" class="service-img">
-            <div class="service-body">
-              <div class="service-title">その他住まい補助</div>
-              <div class="service-desc">網戸張替えやカーテンレール取付など日常の困りごと。</div>
-              <div class="service-price">¥3,000〜</div>
-            </div>
-          </div>
         </div>
-      </div>
-
-      <!-- ご利用案内・対応エリア・安心保障 -->
-      <div class="section-card">
-        <h2>対応エリア・安心のお約束</h2>
-        
-        <div class="info-box">
-          <div class="info-title">出張対応エリア</div>
-          <div class="info-text">拠点エリアを中心に出張対応中（近隣市区町村もお気軽にご相談ください）。</div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-title">安心の損害賠償保険加入</div>
-          <div class="info-text">万が一の作業中の壁・床等の破損トラブルにも手厚く対応する損害保険に加入しております。</div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-title">駐車スペースについて</div>
-          <div class="info-text">軽自動車または作業車でお伺いします。敷地内に駐車スペースがない場合は近隣のコインパーキングを利用いたします（実費のご負担をお願いする場合がございます）。</div>
-        </div>
-      </div>
-
-      <!-- お支払い方法のご案内 -->
-      <div class="section-card">
-        <h2>お支払い方法のご案内</h2>
-        <div class="payment-list">
-          <div class="payment-item">
-            <div class="payment-item-title">現金決済</div>
-            <div class="payment-tags">作業完了時の現地清算</div>
-          </div>
-          <div class="payment-item">
-            <div class="payment-item-title">クレジットカード</div>
-            <div class="payment-tags">VISA / JCB / Mastercard / AMEX</div>
-          </div>
-          <div class="payment-item">
-            <div class="payment-item-title">QRコード決済</div>
-            <div class="payment-tags">PayPay / LINE Pay / d払い / 楽天ペイ</div>
-          </div>
-          <div class="payment-item">
-            <div class="payment-item-title">銀行振込</div>
-            <div class="payment-tags">請求書払い（後日振込対応）</div>
-          </div>
-        </div>
-        <div class="payment-note">※作業完了後にご希望の方法でお支払いいただけます。</div>
-      </div>
-
-      <!-- 問い合わせカード -->
-      <div class="section-card">
-        <h2>ご相談・お問い合わせ</h2>
-        <p style="font-size: 13px; color: #666; margin-top: -4px;">写真をお送りいただくと、事前にお見積り・相談がスムーズです。</p>
-        <a href="https://line.me/" class="btn btn-line">LINEで写真相談・問い合わせ</a>
-        <button class="btn btn-reserve" onclick="switchToChatTab()">チャット形式でお問い合わせ</button>
-      </div>
     </div>
-
-    <!-- タブ2: 計算（概算見積もり） -->
-    <div id="tab-calc" class="tab-content">
-      <div class="section-card">
-        <h2>1分でわかる概算お見積り</h2>
-        <p style="font-size: 12px; color: #718096; margin-top: -4px;">ご希望の作業と条件にチェックを入れてください。</p>
-
-        <form id="calcForm">
-          <div class="calc-section-title">基本作業メニュー</div>
-          
-          <div class="calc-item">
-            <label>
-              <input type="checkbox" class="calc-check" value="15000">
-              キッチン設備設置・交換
-            </label>
-            <span class="price-tag">¥15,000〜</span>
-          </div>
-
-          <div class="calc-item">
-            <label>
-              <input type="checkbox" class="calc-check" value="6000">
-              家具の組み立て（小型〜中型）
-            </label>
-            <span class="price-tag">¥6,000〜</span>
-          </div>
-
-          <div class="calc-item">
-            <label>
-              <input type="checkbox" class="calc-check" value="12000">
-              大型家具・ベッド等の組み立て
-            </label>
-            <span class="price-tag">¥12,000〜</span>
-          </div>
-
-          <div class="calc-item">
-            <label>
-              <input type="checkbox" class="calc-check" value="8000">
-              不要家具の解体・回収サポート
-            </label>
-            <span class="price-tag">¥8,000〜</span>
-          </div>
-
-          <div class="calc-section-title">出張費・オプション</div>
-
-          <div class="calc-item">
-            <label>
-              <input type="checkbox" class="calc-check" value="3000">
-              基本出張費（エリア内一律）
-            </label>
-            <span class="price-tag">¥3,000</span>
-          </div>
-
-          <div class="calc-item">
-            <label>
-              <input type="checkbox" class="calc-check" value="3000">
-              階段作業（2階以上・エレベーターなし）
-            </label>
-            <span class="price-tag">¥3,000</span>
-          </div>
-
-          <div class="calc-item">
-            <label>
-              <input type="checkbox" class="calc-check" value="4000">
-              夜間・早朝指定作業
-            </label>
-            <span class="price-tag">¥4,000</span>
-          </div>
-        </form>
-
-        <div class="total-box">
-          <div class="total-label">概算お見積り合計</div>
-          <div class="total-price">¥<span id="totalDisplay">0</span></div>
-          <div class="tax-note">※作業規模や現場状況により前後する場合がございます</div>
-        </div>
-
-        <a href="https://line.me/" class="btn btn-line">この金額を目安にLINEで相談</a>
-      </div>
-    </div>
-
-    <!-- タブ3: 質問 (Q&A) -->
-    <div id="tab-qa" class="tab-content">
-      <div class="section-card">
-        <h2>よくあるご質問（Q&amp;A）</h2>
-        
-        <div class="qa-item open">
-          <div class="qa-question" onclick="toggleQa(this)">
-            <div><span class="q-mark">Q.</span> 見積もりや相談は無料ですか？</div>
-            <div class="qa-toggle-icon">[開閉]</div>
-          </div>
-          <div class="qa-answer">
-            <span class="a-mark">A.</span> はい、LINEやお電話での事前相談・概算見積もりは完全無料です。現場確認が必要な場合も事前にお知らせいたしますのでご安心ください。
-          </div>
-        </div>
-
-        <div class="qa-item">
-          <div class="qa-question" onclick="toggleQa(this)">
-            <div><span class="q-mark">Q.</span> 万が一、作業中に壁や床が傷ついた場合の保証は？</div>
-            <div class="qa-toggle-icon">[開閉]</div>
-          </div>
-          <div class="qa-answer">
-            <span class="a-mark">A.</span> 十分に養生を行い細心の注意を払って施工いたしますが、万が一の事態に備えて最高1億円対応の損害賠償保険に加入しております。
-          </div>
-        </div>
-
-        <div class="qa-item">
-          <div class="qa-question" onclick="toggleQa(this)">
-            <div><span class="q-mark">Q.</span> 急ぎで即日作業をお願いしたいのですが可能ですか？</div>
-            <div class="qa-toggle-icon">[開閉]</div>
-          </div>
-          <div class="qa-answer">
-            <span class="a-mark">A.</span> スケジュールの空き状況によっては最短即日の訪問・対応も可能です。お急ぎの場合はLINEより「本日希望」とご連絡ください。
-          </div>
-        </div>
-
-        <div class="qa-item">
-          <div class="qa-question" onclick="toggleQa(this)">
-            <div><span class="q-mark">Q.</span> 駐車スペースがない場合はどうなりますか？</div>
-            <div class="qa-toggle-icon">[開閉]</div>
-          </div>
-          <div class="qa-answer">
-            <span class="a-mark">A.</span> 近隣のコインパーキングを利用いたします。その際の実費（駐車料金）のみご負担をお願いしております。
-          </div>
-        </div>
-
-        <div class="qa-item">
-          <div class="qa-question" onclick="toggleQa(this)">
-            <div><span class="q-mark">Q.</span> 追加料金が発生することはありますか？</div>
-            <div class="qa-toggle-icon">[開閉]</div>
-          </div>
-          <div class="qa-answer">
-            <span class="a-mark">A.</span> 事前にお伝えしたお見積り金額から、無断で追加費用が発生することはございません。追加作業のご要望があった場合のみ、必ず事前にご相談・ご提示いたします。
-          </div>
-        </div>
-
-        <div style="margin-top: 20px;">
-          <p style="font-size: 12px; color: #718096; text-align: center;">その他、ご不明な点はお気軽にご相談ください。</p>
-          <a href="https://line.me/" class="btn btn-line">LINEで質問・相談してみる</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- タブ4: 相談（チャット形式お問い合わせ） -->
-    <div id="tab-chat" class="tab-content">
-      <div class="section-card">
-        <h2>チャット形式お問い合わせ</h2>
-        <p style="font-size: 12px; color: #718096; margin-top: -4px;">質問にお答えいただくだけで、簡単にご相談が完了します。</p>
-
-        <div class="chat-container" id="chatContainer">
-          <!-- チャット履歴 -->
-        </div>
-
-        <div id="chatControlArea">
-          <!-- 入力コントロール -->
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- 左下追従アプリアイコンボタン -->
-  <div class="floating-app-btn" onclick="openAppModal()">
-    <img src="dice.webp" alt="アプリ保存">
-    <div class="floating-app-text">
-      <div class="title">アプリ化する</div>
-      <div class="sub">ホームに追加 +</div>
-    </div>
-  </div>
-
-  <!-- アプリ追加方法のモーダルポップアップ -->
-  <div id="appModal" class="modal-overlay" onclick="closeAppModal(event)">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <img src="dice.webp" alt="アプリアイコン" class="modal-icon">
-      <div class="modal-title">ホーム画面に追加してアプリ化</div>
-      <div class="modal-desc">
-        <strong>【iPhoneの場合 (Safari)】</strong><br>
-        1. 画面下の共有ボタン（四角から上矢印）をタップ<br>
-        2. メニューから「ホーム画面に追加」を選択<br><br>
-        <strong>【Androidの場合 (Chrome)】</strong><br>
-        1. 画面右上のメニュー（3点リーダー）をタップ<br>
-        2. 「アプリをインストール」または「ホーム画面に追加」を選択
-      </div>
-      <button class="close-btn" onclick="closeAppModal()">閉じる</button>
-    </div>
-  </div>
-
-  <script>
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      
-      document.getElementById(tabId).classList.add('active');
-      if (btn) {
-        btn.classList.add('active');
-      }
-      window.scrollTo(0, 0);
-
-      if (tabId === 'tab-chat' && chatStep === 0) {
-        startChat();
-      }
-    }
-
-    function switchToChatTab() {
-      const chatBtn = document.getElementById('btn-chat');
-      switchTab('tab-chat', chatBtn);
-    }
-
-    function toggleQa(element) {
-      const parent = element.parentElement;
-      parent.classList.toggle('open');
-    }
-
-    function openAppModal() {
-      document.getElementById('appModal').classList.add('open');
-    }
-    function closeAppModal() {
-      document.getElementById('appModal').classList.remove('open');
-    }
-
-    // 見積もり計算
-    const checkboxes = document.querySelectorAll('.calc-check');
-    const totalDisplay = document.getElementById('totalDisplay');
-
-    function calculateTotal() {
-      let total = 0;
-      checkboxes.forEach(box => {
-        if (box.checked) {
-          total += parseInt(box.value, 10);
-        }
-      });
-      totalDisplay.textContent = total.toLocaleString();
-    }
-
-    checkboxes.forEach(box => {
-      box.addEventListener('change', calculateTotal);
-    });
-
-    // -------------------------------------------------------------
-    // チャット形式問い合わせフォーム ロジック（項目拡張版）
-    // -------------------------------------------------------------
-    let chatStep = 0;
-    const chatData = {
-      service: '',
-      building: '',
-      area: '',
-      date: '',
-      contact: '',
-      detail: ''
-    };
-
-    const chatContainer = document.getElementById('chatContainer');
-    const chatControlArea = document.getElementById('chatControlArea');
-
-    function addBotMessage(text) {
-      const bubble = document.createElement('div');
-      bubble.className = 'chat-bubble bot';
-      bubble.innerHTML = text;
-      chatContainer.appendChild(bubble);
-    }
-
-    function addUserMessage(text) {
-      const bubble = document.createElement('div');
-      bubble.className = 'chat-bubble user';
-      bubble.textContent = text;
-      chatContainer.appendChild(bubble);
-    }
-
-    function startChat() {
-      chatStep = 1;
-      chatContainer.innerHTML = '';
-      addBotMessage('こんにちは。暮らしのサポート工房です。ご相談ありがとうございます。まずはご希望の作業内容をお選びください。');
-
-      chatControlArea.innerHTML = `
-        <div class="chat-options">
-          <button class="chat-opt-btn" onclick="selectService('キッチン設置')">キッチン設置</button>
-          <button class="chat-opt-btn" onclick="selectService('家具の組み立て')">家具の組み立て</button>
-          <button class="chat-opt-btn" onclick="selectService('不用品・家具の回収')">不用品・家具の回収</button>
-          <button class="chat-opt-btn" onclick="selectService('その他住まいの修繕')">その他住まいの修繕</button>
-        </div>
-      `;
-    }
-
-    function selectService(serviceName) {
-      chatData.service = serviceName;
-      addUserMessage(serviceName);
-      chatStep = 2;
-
-      setTimeout(() => {
-        addBotMessage('承りました。作業を行う建物の環境をお選びください。');
-        chatControlArea.innerHTML = `
-          <div class="chat-options">
-            <button class="chat-opt-btn" onclick="selectBuilding('一戸建て')">一戸建て</button>
-            <button class="chat-opt-btn" onclick="selectBuilding('マンション（EVあり）')">マンション（エレベーターあり）</button>
-            <button class="chat-opt-btn" onclick="selectBuilding('マンション（階段）')">マンション（階段作業）</button>
-          </div>
-        `;
-      }, 400);
-    }
-
-    function selectBuilding(buildingType) {
-      chatData.building = buildingType;
-      addUserMessage(buildingType);
-      chatStep = 3;
-
-      setTimeout(() => {
-        addBotMessage('ありがとうございます。作業先のお住まいの地域（市区町村）をご入力ください。（例: 埼玉県加須市、久喜市 など）');
-        chatControlArea.innerHTML = `
-          <div class="chat-input-area">
-            <input type="text" id="chatAreaInput" placeholder="市区町村を入力">
-            <button class="chat-send-btn" onclick="sendArea()">次へ</button>
-          </div>
-        `;
-      }, 400);
-    }
-
-    function sendArea() {
-      const input = document.getElementById('chatAreaInput');
-      const val = input.value.trim();
-      if (!val) return;
-      chatData.area = val;
-      addUserMessage(val);
-      chatStep = 4;
-
-      setTimeout(() => {
-        addBotMessage('ご希望の訪問日程や時間帯の目安はございますか？（例: 8月25日午前中、なるべく早く 等）');
-        chatControlArea.innerHTML = `
-          <div class="chat-input-area">
-            <input type="text" id="chatDateInput" placeholder="ご希望の日程や時期を入力">
-            <button class="chat-send-btn" onclick="sendDate()">次へ</button>
-          </div>
-        `;
-      }, 400);
-    }
-
-    function sendDate() {
-      const input = document.getElementById('chatDateInput');
-      const val = input.value.trim();
-      if (!val) return;
-      chatData.date = val;
-      addUserMessage(val);
-      chatStep = 5;
-
-      setTimeout(() => {
-        addBotMessage('承りました。折り返しご連絡させていただくためのお名前とお電話番号（またはメールアドレス）をご入力ください。');
-        chatControlArea.innerHTML = `
-          <div class="chat-input-area">
-            <input type="text" id="chatContactInput" placeholder="お名前・電話番号またはメール">
-            <button class="chat-send-btn" onclick="sendContact()">次へ</button>
-          </div>
-        `;
-      }, 400);
-    }
-
-    function sendContact() {
-      const input = document.getElementById('chatContactInput');
-      const val = input.value.trim();
-      if (!val) return;
-      chatData.contact = val;
-      addUserMessage(val);
-      chatStep = 6;
-
-      setTimeout(() => {
-        addBotMessage('ありがとうございます。最後に、家具のメーカー・商品名（または購入ページURL）や詳しい状況があればご記入ください。（特になければ「なし」で構いません）');
-        chatControlArea.innerHTML = `
-          <div class="chat-input-area" style="flex-direction: column;">
-            <textarea id="chatDetailInput" rows="3" placeholder="ニトリの〇〇、商品URLなど"></textarea>
-            <button class="btn btn-reserve" style="margin-top: 5px;" onclick="sendFinal()">送信して相談を完了する</button>
-          </div>
-        `;
-      }, 400);
-    }
-
-    function sendFinal() {
-      const input = document.getElementById('chatDetailInput');
-      const val = input.value.trim() || 'なし';
-      chatData.detail = val;
-      addUserMessage(val);
-      chatStep = 7;
-
-      setTimeout(() => {
-        addBotMessage('ご入力ありがとうございました。以下の内容で受付いたしました。<br><br>' +
-          '【作業内容】' + chatData.service + '<br>' +
-          '【住居環境】' + chatData.building + '<br>' +
-          '【訪問地域】' + chatData.area + '<br>' +
-          '【希望日程】' + chatData.date + '<br>' +
-          '【ご連絡先】' + chatData.contact + '<br>' +
-          '【詳細・商品】' + chatData.detail + '<br><br>' +
-          '担当者より折り返しご連絡いたします。今しばらくお待ちください。');
-
-        chatControlArea.innerHTML = `
-          <div style="text-align: center; margin-top: 10px;">
-            <p style="font-size: 12px; color: #718096;">より早く写真を送って相談したい場合はLINEもご利用いただけます。</p>
-            <a href="https://line.me/" class="btn btn-line">LINEで写真を送ってやり取りする</a>
-            <button class="close-btn" style="margin-top: 8px;" onclick="startChat()">もう一度最初から入力する</button>
-          </div>
-        `;
-      }, 400);
-    }
-  </script>
 
 </body>
 </html>
